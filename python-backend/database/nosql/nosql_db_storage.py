@@ -27,8 +27,11 @@ class NoSQLDBStorage:
         return self.db[collection_name].find_one(query)
 
     def insert(self, collection_name, document):
-        """Insert a new document into a collection"""
-        return self.db[collection_name].insert_one(document).inserted_id
+        try:
+            return self.db[collection_name].insert_one(document).inserted_id
+        except Exception as e:
+            print(f"Error inserting document: {e}")
+            return None
 
     def update(self, collection_name, query, update_data):
         """Update documents in a collection"""

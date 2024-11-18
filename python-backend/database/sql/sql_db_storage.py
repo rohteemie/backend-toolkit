@@ -131,12 +131,15 @@ class DBStorage:
         Returns:
             The object, or None if not found.
         """
-        if isinstance(cls, str):
-            cls = classes.get(cls)
-        if cls is None:
+        try:
+            if isinstance(cls, str):
+                cls = classes.get(cls)
+            if cls is None:
+                return None
+            return self.__session.query(cls).filter_by(id=id).first()
+        except Exception as e:
+            print(f"Error retrieving object: {e}")
             return None
-
-        return self.__session.query(cls).filter_by(id=id).first()
 
     def count(self, cls=None):
         """
